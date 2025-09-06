@@ -1,0 +1,4 @@
+CREATE TABLE video (
+    id VARCHAR(255) PRIMARY KEY,
+    title VARCHAR(255)
+);

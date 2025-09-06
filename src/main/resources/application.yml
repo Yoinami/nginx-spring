@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: nginx-spring
+  
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/nginx_spring
+    username: postgres
+    password: postgres
+    pool:
+      enable: true
+
+# Application file paths. Override with environment variables if desired.
+file:
+  # Upload directory for incoming videos. Can be relative or absolute.
+  # Uses VIDEO_DIR env var if set, otherwise defaults to "videos" under the working dir.
+  video-dir: D:/Code/git/nginx-spring/src/main/resources/videos/
+
+  # Paths to ffmpeg/ffprobe binaries. If they are on PATH, leaving as "ffmpeg"/"ffprobe" works.
+  # Override with FFMPEG_PATH / FFPROBE_PATH env vars to point to specific executables.
+  ffmpeg-dir: C:/ProgramData/chocolatey/bin/ffmpeg.exe
+  ffprobe-dir: C:/ProgramData/chocolatey/bin/ffprobe.exe

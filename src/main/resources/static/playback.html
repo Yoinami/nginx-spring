@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HLS Video Player</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #222; color: #fff; text-align: center; }
+        #video-container { margin: 40px auto; max-width: 640px; }
+        video { width: 100%; border-radius: 8px; background: #000; }
+        input, button { padding: 8px; margin: 8px; border-radius: 4px; border: none; }
+        input { width: 60%; }
+        button { background: #0078d7; color: #fff; cursor: pointer; }
+        button:hover { background: #005fa3; }
+    </style>
+</head>
+<body>
+    <h1>HLS Video Player</h1>
+    <div id="video-container">
+        <button type="button" onclick="loadVideo()">Play</button>
+        <span>Stream URL:</span>
+        <input type="text" id="streamUrl" th:value="${streamUrl}">
+        <br>
+        <video id="video" controls></video>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Optionally auto-play if streamUrl is pre-filled
+            var input = document.getElementById('streamUrl');
+            if (input.value) {
+                loadVideo();
+            }
+        });
+
+        function loadVideo() {
+            const input = document.getElementById('streamUrl');
+            const streamUrl = input.value;
+            const video = document.getElementById('video');
+            if (!streamUrl) {
+                alert('Please enter a stream URL.');
+                return;
+            }
+            if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(streamUrl);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play();
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = streamUrl;
+                video.addEventListener('loadedmetadata', function() {
+                    video.play();
+                });
+            } else {
+                alert('HLS is not supported in this browser.');
+            }
+        }
+    </script>
+</body>
+</html>
