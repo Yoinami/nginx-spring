@@ -1,4 +1,4 @@
-package dev.yoinami.transcoder_service.utils;
+package dev.yoinami.transcoder_service.util;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -12,11 +12,11 @@ import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 
 @Service
-public class VideoService {
+public class TranscodeVideo {
     private final String ffmpegDir;
     private final String ffprobeDir;
 
-    public VideoService(
+    public TranscodeVideo(
             @Value("${file.ffmpeg-dir}") String ffmpegDir,
             @Value("${file.ffprobe-dir}") String ffprobeDir) {
         this.ffmpegDir = ffmpegDir;
@@ -106,18 +106,4 @@ public class VideoService {
                 Paths.get(outputDir, baseName + "_master.m3u8"),
                 masterContent.getBytes());
     }
-
-    public String returnMasterPlaylist(String inputPath) throws IOException {
-        String baseName = inputPath.substring(inputPath.lastIndexOf('\\') + 1, inputPath.lastIndexOf('.'));
-        String masterContent = "#EXTM3U\n" +
-                "#EXT-X-STREAM-INF:BANDWIDTH=3000000,RESOLUTION=1280x720\n" +
-                baseName + "_720p.m3u8\n" +
-                "#EXT-X-STREAM-INF:BANDWIDTH=1500000,RESOLUTION=854x480\n" +
-                baseName + "_480p.m3u8\n" +
-                "#EXT-X-STREAM-INF:BANDWIDTH=500000,RESOLUTION=426x240\n" +
-                baseName + "_240p.m3u8";
-
-        return masterContent;
-    }
-
 }

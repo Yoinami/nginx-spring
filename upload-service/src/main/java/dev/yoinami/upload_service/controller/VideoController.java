@@ -53,7 +53,6 @@ public class VideoController {
         return filePart
                 .transferTo(filePath.toFile())
                 .then(videoMono)
-                .then(Mono.fromRunnable(() -> videoService.transcodeVideo(filePath.toString())))
                 .then(Mono.just(ResponseEntity.ok("Upload Successful")))
                 .onErrorResume(
                         e -> Mono.just(ResponseEntity.internalServerError().body("Upload failed: " + e.getMessage())));

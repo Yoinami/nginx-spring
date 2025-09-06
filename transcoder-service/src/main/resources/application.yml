@@ -2,15 +2,34 @@ spring:
   application:
     name: transcoder-service
 
-datasource:
-  url: jdbc:postgresql://localhost:5432/nginx_spring
-  username: root
-  password: root
-  driver-class-name: org.postgresql.Driver
-  hikari:
-    maximum-pool-size: 10
-    minimum-idle: 5
-    idle-timeout: 30000
-    pool-name: HikariCP
-    max-lifetime: 2000000
-    connection-timeout: 30000
+  datasource:
+    url: jdbc:postgresql://localhost:5432/nginx_spring
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 30000
+      pool-name: HikariCP
+      max-lifetime: 2000000
+      connection-timeout: 30000
+
+# Application file paths. Override with environment variables if desired.
+file:
+  video-dir: D:/Code/git/nginx-spring/src/main/resources/videos/
+  ffmpeg-dir: C:/ProgramData/chocolatey/bin/ffmpeg.exe
+  ffprobe-dir: C:/ProgramData/chocolatey/bin/ffprobe.exe
+
+
+rabbitmq:
+  host: localhost
+  port: 5672
+  username: guest
+  password: guest
+  queue: 
+    name: video_transcode_queue
+  exchange: 
+    name: video_transcode_exchange
+  routing: 
+    key: video.transcode.key

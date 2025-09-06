@@ -11,11 +11,18 @@ spring:
 
 # Application file paths. Override with environment variables if desired.
 file:
-  # Upload directory for incoming videos. Can be relative or absolute.
-  # Uses VIDEO_DIR env var if set, otherwise defaults to "videos" under the working dir.
-  video-dir: D:/Code/git/nginx-spring/src/main/resources/videos/
+  video-dir: D:/Code/git/nginx-spring/videos
 
-  # Paths to ffmpeg/ffprobe binaries. If they are on PATH, leaving as "ffmpeg"/"ffprobe" works.
-  # Override with FFMPEG_PATH / FFPROBE_PATH env vars to point to specific executables.
-  ffmpeg-dir: C:/ProgramData/chocolatey/bin/ffmpeg.exe
-  ffprobe-dir: C:/ProgramData/chocolatey/bin/ffprobe.exe
+# RabbitMQ configuration
+
+rabbitmq:
+  host: localhost
+  port: 5672
+  username: guest
+  password: guest
+  queue: 
+    name: video_transcode_queue
+  exchange: 
+    name: video_transcode_exchange
+  routing: 
+    key: video.transcode.key
