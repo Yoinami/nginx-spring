@@ -1,4 +1,4 @@
-package dev.yoinami.nginx_spring.service;
+package dev.yoinami.upload_service.service;
 
 import java.io.IOException;
 import java.nio.file.Files;

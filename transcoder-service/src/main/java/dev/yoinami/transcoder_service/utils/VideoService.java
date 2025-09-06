@@ -1,67 +1,44 @@
-package dev.yoinami.nginx_spring.service;
+package dev.yoinami.transcoder_service.utils;
 
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import dev.yoinami.nginx_spring.model.Video;
-import dev.yoinami.nginx_spring.repository.VideoRepository;
 import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
-import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 @Service
 public class VideoService {
-    private final VideoRepository videoRepository;
     private final String ffmpegDir;
     private final String ffprobeDir;
 
     public VideoService(
-            VideoRepository videoRepository,
             @Value("${file.ffmpeg-dir}") String ffmpegDir,
             @Value("${file.ffprobe-dir}") String ffprobeDir) {
-
-        this.videoRepository = videoRepository;
         this.ffmpegDir = ffmpegDir;
         this.ffprobeDir = ffprobeDir;
     }
 
-    public Mono<Video> createVideo(String title) {
-        Video video = new Video();
-        video.setId(UUID.randomUUID().toString());
-        video.setTitle(title);
-        video.setNew(true);
-        return videoRepository.save(video);
-    }
-
     public void transcodeVideo(String filePath) {
-        Mono.fromRunnable(() -> {
-            System.out.println("Transcoding started for: " + filePath);
-            try {
-                transcodeToHLS(filePath);
-                createMasterPlaylist(filePath);
-                System.out.println("Transcoding completed for: " + filePath);
-            } catch (IOException e) {
-                System.err.println("Transcoding failed for: " + filePath);
-                e.printStackTrace();
-            }
-        })
-                .subscribeOn(Schedulers.boundedElastic()) // Offload to separate thread
-                .subscribe();
+        System.out.println("Transcoding started for: " + filePath);
+        try {
+            transcodeToHLS(filePath);
+            createMasterPlaylist(filePath);
+            System.out.println("Transcoding completed for: " + filePath);
+        } catch (IOException e) {
+            System.err.println("Transcoding failed for: " + filePath);
+            e.printStackTrace();
+        }   
     }
 
     public void transcodeToHLS(String inputPath) throws IOException {
-        // Initialize FFmpeg and FFprobe
         FFmpeg ffmpeg = new FFmpeg(ffmpegDir);
         FFprobe ffprobe = new FFprobe(ffprobeDir);
 
-        // Base output name without extension
         String baseName = inputPath.substring(inputPath.lastIndexOf('\\') + 1, inputPath.lastIndexOf('.'));
         String outputDir = Paths.get(inputPath).getParent().toString();
 
@@ -142,4 +119,5 @@ public class VideoService {
 
         return masterContent;
     }
+
 }

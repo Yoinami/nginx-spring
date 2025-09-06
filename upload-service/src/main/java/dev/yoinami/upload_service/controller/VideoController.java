@@ -1,4 +1,4 @@
-package dev.yoinami.nginx_spring.controller;
+package dev.yoinami.upload_service.controller;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import dev.yoinami.nginx_spring.model.Video;
-import dev.yoinami.nginx_spring.service.VideoService;
+import dev.yoinami.upload_service.model.Video;
+import dev.yoinami.upload_service.service.VideoService;
 import reactor.core.publisher.Mono;
 
 @Controller

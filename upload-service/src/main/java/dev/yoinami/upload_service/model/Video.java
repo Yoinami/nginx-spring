@@ -1,4 +1,4 @@
-package dev.yoinami.nginx_spring.model;
+package dev.yoinami.upload_service.model;
 
 
 import org.springframework.data.annotation.Id;
